@@ -7,7 +7,31 @@ import { createContext } from 'react';//context
 
 export const AppContext=createContext();//context
 function App() {
-  const[board,setBoard]=useState(boardDefault);
+  const [board,setBoard]=useState(boardDefault);
+  const [currAttempt,setCurrAttempt]=useState({attempt:0,letterPos:0});
+
+  const onSelectLetter=(value)=>{
+    if(currAttempt.letterPos>4)return ;
+            // console.log(value)
+    const newBoard=[...board];
+    newBoard[currAttempt.attempt][currAttempt.letterPos]=value;
+    setBoard(newBoard);
+    setCurrAttempt({...currAttempt,letterPos: currAttempt.letterPos +1})
+  }
+
+  const onDelete=()=>{
+    if(currAttempt.letterPos===0) return;
+    const newBoard=[...board];
+    newBoard[currAttempt.attempt][currAttempt.letterPos-1]="";
+    setBoard(newBoard);
+    setCurrAttempt({...currAttempt,letterPos: currAttempt.letterPos -1});
+
+  }
+
+  const onEnter=()=>{
+    if(currAttempt.letterPos!==5) return;
+    setCurrAttempt({attempt:currAttempt.attempt+1,letterPos:0});
+  }
 
   return (
     
@@ -16,9 +40,11 @@ function App() {
         <h1>Wordle</h1>
       </nav>
       {/* context */}
-      <AppContext.Provider value={{board,setBoard}}>
-        <Board/>
-        <Keyboard/>
+      <AppContext.Provider value={{board,setBoard,currAttempt,setCurrAttempt,onSelectLetter,onDelete,onEnter}}>
+        <div className='game'>
+          <Board/>
+          <Keyboard/>
+        </div>
       </AppContext.Provider>
     </div>
   );
