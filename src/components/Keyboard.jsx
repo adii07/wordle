@@ -7,7 +7,7 @@ function Keyboard() {
     const keys2 = ["A", "S", "D", "F", "G", "H", "J", "K", "L"];
     const keys3 = ["Z", "X", "C", "V", "B", "N", "M"];
 
-    const{currAttempt,onSelectLetter,onDelete,onEnter}=useContext(AppContext);
+    const{currAttempt,onSelectLetter,onDelete,onEnter,disabledLetters}=useContext(AppContext);
 
     const handleKeyboard=useCallback((e)=>{
         if(e.key==="Enter"){
@@ -45,18 +45,18 @@ function Keyboard() {
     <div className='keyboard' onKeyDown={handleKeyboard}>
         <div className='line1'>
             {keys1.map((key,id)=>{
-                return <Key key={id} value={key}/>
+                return <Key key={id} value={key} disabled={disabledLetters.includes(key)} />
             })}
         </div>
         <div className='line2'>
             {keys2.map((key,id)=>{
-                return <Key key={id} value={key}/>
+                return <Key key={id} value={key} disabled={disabledLetters.includes(key)}/>
             })}
         </div>
         <div className='line3'>
             <Key value={"Enter"} key="enterKey" bigKey/>
             {keys3.map((key,id)=>{
-                return <Key value={key} key={id}/>
+                return <Key value={key} key={id} disabled={disabledLetters.includes(key)} />
             })}
             <Key value={"Delete"} key="deleteKey" bigKey/>
         </div>
